@@ -1,20 +1,21 @@
+/* eslint-disable */
 const client = contentful.createClient({
   // This is the space ID. A space is like a project folder in Contentful terms
-  space: "x5854l3ofv89",
+  space: 'x5854l3ofv89',
   // This is the access token for this space. Normally you get both ID and the token in the Contentful web app
-  accessToken: "s_07SRi4pogumqvsufH71YW5tc6jHNzwoO1vjINptSE",
+  accessToken: 's_07SRi4pogumqvsufH71YW5tc6jHNzwoO1vjINptSE',
 });
 
 // variable
-const cartBtn = document.querySelector(".cart-btn");
-const closeCartBtn = document.querySelector(".close-cart");
-const clearCartBtn = document.querySelector(".clear-cart");
-const cartDOM = document.querySelector(".cart");
-const cartOverlay = document.querySelector(".cart-overlay");
-const cartItems = document.querySelector(".cart-items");
-const cartTotal = document.querySelector(".cart-total");
-const cartContent = document.querySelector(".cart-content");
-const productsDOM = document.querySelector(".products-center");
+const cartBtn = document.querySelector('.cart-btn');
+const closeCartBtn = document.querySelector('.close-cart');
+const clearCartBtn = document.querySelector('.clear-cart');
+const cartDOM = document.querySelector('.cart');
+const cartOverlay = document.querySelector('.cart-overlay');
+const cartItems = document.querySelector('.cart-items');
+const cartTotal = document.querySelector('.cart-total');
+const cartContent = document.querySelector('.cart-content');
+const productsDOM = document.querySelector('.products-center');
 
 // cart
 let cart = [];
@@ -26,7 +27,7 @@ let buttonsDOM = [];
 class Products {
   async getProducts() {
     try {
-      const contentful = await client.getEntries({ content_type: "title" });
+      const contentful = await client.getEntries({ content_type: 'title' });
 
       // let result = await fetch("products.JSON");
       // let data = await result.json();
@@ -48,7 +49,7 @@ class Products {
 // display products
 class UI {
   displayProducts(products) {
-    let productInnerHTML = ""; // string
+    let productInnerHTML = ''; // string
     products.forEach((product) => {
       productInnerHTML += `
         <!-- single products -->
@@ -70,22 +71,22 @@ class UI {
   }
 
   getBagButtons() {
-    const buttons = [...document.querySelectorAll(".addToCart-btn")]; // turn node list to array
+    const buttons = [...document.querySelectorAll('.addToCart-btn')]; // turn node list to array
     buttonsDOM = buttons;
     buttons.forEach((button) => {
-      let id = button.dataset.id;
-      let inCart = cart.find((item) => item.id === id);
+      const { id } = button.dataset;
+      const inCart = cart.find((item) => item.id === id);
 
       if (inCart) {
-        button.innerHTML = "In Cart";
+        button.innerHTML = 'In Cart';
         button.disabled = true;
       }
-      button.addEventListener("click", (e) => {
-        e.target.innerHTML = "In Cart";
+      button.addEventListener('click', (e) => {
+        e.target.innerHTML = 'In Cart';
         e.target.disabled = true;
 
         // get product from products in the local storage
-        let cartItem = { ...Storage.getProduct(id), amount: 1 }; // spread the property and amount property of obj
+        const cartItem = { ...Storage.getProduct(id), amount: 1 }; // spread the property and amount property of obj
 
         // add product to the cart
         cart = [...cart, cartItem];
@@ -99,7 +100,7 @@ class UI {
         // display cart item
         this.addCartItem(cartItem);
 
-        //show the cart
+        // show the cart
         this.showCart();
       });
     });
@@ -117,8 +118,8 @@ class UI {
   }
 
   addCartItem(item) {
-    const div = document.createElement("div");
-    div.classList.add("cart-item");
+    const div = document.createElement('div');
+    div.classList.add('cart-item');
     div.innerHTML = `
                     <img src=${item.image} alt="product">
                     <div>
@@ -135,16 +136,16 @@ class UI {
   }
 
   showCart() {
-    cartOverlay.classList.add("transparentBcg");
-    cartDOM.classList.add("showCart");
+    cartOverlay.classList.add('transparentBcg');
+    cartDOM.classList.add('showCart');
   }
 
   setupAPP() {
     cart = Storage.getCart();
     this.setCartValue(cart);
     this.populateCart(cart);
-    cartBtn.addEventListener("click", this.showCart);
-    closeCartBtn.addEventListener("click", this.hideCart);
+    cartBtn.addEventListener('click', this.showCart);
+    closeCartBtn.addEventListener('click', this.hideCart);
   }
 
   populateCart(cart) {
@@ -152,33 +153,33 @@ class UI {
   }
 
   hideCart() {
-    cartOverlay.classList.remove("transparentBcg");
-    cartDOM.classList.remove("showCart");
+    cartOverlay.classList.remove('transparentBcg');
+    cartDOM.classList.remove('showCart');
   }
 
   cartLogic() {
     // clear cart button
-    clearCartBtn.addEventListener("click", () => this.clearCart());
+    clearCartBtn.addEventListener('click', () => this.clearCart());
 
     // cart functionality
-    cartContent.addEventListener("click", (e) => {
-      if (e.target.classList.contains("remove-item")) {
-        let removeTargetBtn = e.target;
-        let id = removeTargetBtn.dataset.id;
+    cartContent.addEventListener('click', (e) => {
+      if (e.target.classList.contains('remove-item')) {
+        const removeTargetBtn = e.target;
+        const { id } = removeTargetBtn.dataset;
         cartContent.removeChild(removeTargetBtn.parentNode.parentNode);
         this.removeItem(id);
-      } else if (e.target.classList.contains("fa-chevron-up")) {
-        let addAmountBtn = e.target;
-        let id = addAmountBtn.dataset.id;
-        let tempItem = cart.find((item) => item.id === id);
+      } else if (e.target.classList.contains('fa-chevron-up')) {
+        const addAmountBtn = e.target;
+        const { id } = addAmountBtn.dataset;
+        const tempItem = cart.find((item) => item.id === id);
         tempItem.amount++;
         Storage.saveCart(cart);
         this.setCartValue(cart);
         addAmountBtn.nextElementSibling.innerHTML = tempItem.amount;
-      } else if (e.target.classList.contains("fa-chevron-down")) {
-        let lowerAmountBtn = e.target;
-        let id = lowerAmountBtn.dataset.id;
-        let tempItem = cart.find((item) => item.id === id);
+      } else if (e.target.classList.contains('fa-chevron-down')) {
+        const lowerAmountBtn = e.target;
+        const { id } = lowerAmountBtn.dataset;
+        const tempItem = cart.find((item) => item.id === id);
         tempItem.amount--;
         if (tempItem.amount <= 0) {
           cartContent.removeChild(lowerAmountBtn.parentNode.parentNode);
@@ -193,7 +194,7 @@ class UI {
 
   clearCart() {
     // clear cart button
-    let cartItems = cart.map((item) => item.id);
+    const cartItems = cart.map((item) => item.id);
     cartItems.forEach((id) => this.removeItem(id));
 
     // remove the items in the cart
@@ -202,11 +203,12 @@ class UI {
     }
     this.hideCart();
   }
+
   removeItem(id) {
     cart = cart.filter((item) => item.id !== id);
     this.setCartValue(cart);
     Storage.saveCart(cart);
-    let button = this.getSingleButton(id);
+    const button = this.getSingleButton(id);
     button.disabled = false;
     button.innerHTML = `<i class="fas fa-shopping-car"></i>
     add to cart`;
@@ -219,27 +221,30 @@ class UI {
 // local storage
 class Storage {
   static saveProducts(products) {
-    localStorage.setItem("products", JSON.stringify(products));
+    localStorage.setItem('products', JSON.stringify(products));
   }
+
   static getProduct(id) {
-    let products = JSON.parse(localStorage.getItem("products"));
+    const products = JSON.parse(localStorage.getItem('products'));
     return products.find((product) => product.id === id);
   }
+
   static saveCart(cart) {
-    localStorage.setItem("cart", JSON.stringify(cart));
+    localStorage.setItem('cart', JSON.stringify(cart));
   }
+
   static getCart() {
-    return localStorage.getItem("cart")
-      ? JSON.parse(localStorage.getItem("cart"))
+    return localStorage.getItem('cart')
+      ? JSON.parse(localStorage.getItem('cart'))
       : [];
   }
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener('DOMContentLoaded', () => {
   const ui = new UI();
   const getProducts = new Products();
 
-  //setup APP
+  // setup APP
   ui.setupAPP();
 
   // get all products
